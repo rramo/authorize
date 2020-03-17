@@ -1,5 +1,5 @@
-const crypto = require('crypto')
+const crypto = require("crypto");
 const ciphers = crypto.getCiphers();
 ciphers.forEach(c => {
-  console.log(c)
+  console.log(c);
 });
