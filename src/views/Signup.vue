@@ -76,9 +76,9 @@ export default {
   },
   methods: {
     test() {
-      console.log("SALT: ", process.env.SALT);
+      console.log("SALT: ", process.env.VUE_APP_SALT);
       let hashPassword = crypto
-        .pbkdf2("coucou", process.env.SALT, 1000, 64, `sha512`)
+        .pbkdf2("coucou", process.env.VUE_APP_SALT, 1000, 64, `sha512`)
         .toString(`hex`);
       console.log("encrypted password: ", hashPassword);
     },

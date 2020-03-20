@@ -8,7 +8,7 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "start": "env NODE_ENV=development && nodemon ./src/app"
+    "start": "nodemon ./src/app"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
