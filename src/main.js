@@ -6,6 +6,10 @@ import store from "./store";
 
 Vue.config.productionTip = false;
 
+Vue.directive("bibi", function(el) {
+  el.focus();
+});
+
 new Vue({
   router,
   store,

@@ -8,17 +8,17 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const crypto = require("crypto");
 
-const { db } = require("./db");
-const isAuth = require("./middleware/is-auth");
+const { db } = require("./services/db");
+const authorization = require("./middleware/authorization");
 
-const sendMail = require("./mail/sendMail").default;
+const sendMail = require("./services/mail/sendMail").default;
 
 const privateKey = fs.readFileSync(
-  path.join(__dirname, "./key/private.key"),
+  path.join(__dirname, "./services/key/private.key"),
   "utf8"
 );
 const publicKey = fs.readFileSync(
-  path.join(__dirname, "./key/public.key"),
+  path.join(__dirname, "./services/key/public.key"),
   "utf8"
 );
 
@@ -69,18 +69,24 @@ app.post("/register", async (req, res) => {
     // console.log("==============================================");
 
     // Hashing user's salt and password with 1000 iterations, 64 length and sha512 digest
-    const hashPassword = crypto
-      .pbkdf2(password, process.env.SALT, 1000, 64, `sha512`)
-      .toString(`hex`);
+    crypto.pbkdf2(
+      password,
+      process.env.SALT,
+      1000,
+      64,
+      `sha512`,
+      (err, derivedKey) => {
+        if (err) throw err;
 
-    console.log(
-      "new user: ",
-      JSON.stringify({ ...newUser, password: hashPassword })
+        let userid = db.users.create({
+          ...newUser,
+          password: derivedKey.toString()
+        });
+        console.log(`account n°${userid} created`);
+
+        res.sendFile("account/confirmationLinkSent.html");
+      }
     );
-    let userid = db.users.create({ ...newUser, password: hashPassword });
-    console.log(`account n°${userid} created`);
-
-    res.sendFile("account/confirmationLinkSent.html");
   } catch (err) {
     res.sendStatus(500);
   }
@@ -108,7 +114,7 @@ app.get("/register/confirmation", (req, res) => {
   }
 });
 
-app.get("/details", isAuth, (req, res) => {
+app.get("/details", authorization, (req, res) => {
   const user = db.users.list().find(u => u.email === req.user.email);
   res.send(`Welcome ${user.lastname}, you're authorized to see this page!`);
 });

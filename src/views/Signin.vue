@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div>
-      <form @submit.prevent="signIn" :class="{ error: errors.length }">
+      <form @submit.prevent="signIn">
         <div>
-          <div v-if="errors.length">
+          <div v-if="errors.length" :class="{ error: errors.length }">
             <div v-for="error in errors" :key="error">
               {{ error }}
             </div>
@@ -12,18 +12,14 @@
 
         <BaseInput
           v-model="email"
-          id="email"
-          name="email"
+          v-bibi
           label="E-mail"
           type="text"
           autocomplete="current-email"
-          autofocus
         />
 
         <BaseInput
           v-model="password"
-          id="password"
-          name="password"
           label="Password"
           type="password"
           autocomplete="current-password"
@@ -38,6 +34,7 @@
 </template>
 
 <script>
+import axios from "axios";
 import BaseInput from "../components/BaseInput";
 
 export default {
@@ -54,7 +51,6 @@ export default {
   },
   created() {
     let url = new URL(location.href);
-    console.log(url, location.href);
     if (url.searchParams && url.searchParams.get("redirect_uri")) {
       this.redirect_uri = url.searchParams.get("redirect_uri");
     }
@@ -64,22 +60,27 @@ export default {
       let headers = new Headers();
       headers.append("Content-Type", "application/x-www-form-urlencoded");
       this.errors = [];
-      fetch("/authorize", {
+      let { email, password } = this;
+      axios({
         method: "POST",
-        headers: headers,
-        body: `email=${this.email}&password=${this.password}`
-      }).then(res => {
-        if (res.status === 200) {
+        url: "/authorize:9001",
+        headers,
+        data: {
+          email,
+          password
+        }
+      })
+        .then(res => {
           if (this.redirect_uri) {
             let token = res.headers.get("token");
             location.href = `${this.redirect_uri}?token=${token}`;
           } else {
             this.errors.push("redirect_uri not found in query parameters");
           }
-        } else {
-          this.errors.push("authentification failed");
-        }
-      });
+        })
+        .catch(err => {
+          this.errors.push(`authentification failed (${err})`);
+        });
     }
   }
 };

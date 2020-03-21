@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div>
-      <form @submit.prevent="signUp" :class="{ error: errors.length }">
+      <form @submit.prevent="signUp">
         <div>
-          <div v-if="errors.length">
+          <div v-if="errors.length" :class="{ error: errors.length }">
             <div v-for="error in errors" :key="error">
               {{ error }}
             </div>
@@ -12,9 +12,10 @@
 
         <BaseInput
           v-model="lastname"
+          v-autofocus
           label="Lastname"
+          type="text"
           required
-          autofocus
           autocomplete="off"
         />
         <BaseInput
@@ -47,7 +48,6 @@
           Account? <router-link to="/">Sign in</router-link>!
         </div>
         <div class="actions">
-          <button type="button" @click="test">Test</button>
           <button type="submit">Sign up</button>
         </div>
       </form>
@@ -56,9 +56,8 @@
 </template>
 
 <script>
+import axios from "axios";
 import BaseInput from "../components/BaseInput";
-import crypto from "crypto";
-require("dotenv").config();
 
 export default {
   components: {
@@ -75,32 +74,29 @@ export default {
     };
   },
   methods: {
-    test() {
-      console.log("SALT: ", process.env.VUE_APP_SALT);
-      let hashPassword = crypto
-        .pbkdf2("coucou", process.env.VUE_APP_SALT, 1000, 64, `sha512`)
-        .toString(`hex`);
-      console.log("encrypted password: ", hashPassword);
-    },
     signUp() {
       if (this.password === this.confirmPassword) {
         let headers = new Headers();
         headers.append("Content-Type", "application/x-www-form-urlencoded");
         this.errors = [];
-        fetch("/register", {
-          method: "POST",
-          headers,
-          body: `lastname=${this.lastname}
-                &firstname=${this.firstname}
-                &email=${this.email}
-                &password=${this.password}`
+        let { lastname, firstname, email, password } = this;
+
+        // Send a POST request
+        axios({
+          method: "post",
+          url: "/register:9001",
+          data: {
+            lastname,
+            firstname,
+            email,
+            password
+          }
         })
-          .then(res => {
-            if (res.status === 200) {
-              this.$router.push("/registrationOk");
-            } else {
-              this.errors.push("registration failed");
-            }
+          .then(() => {
+            this.$router.push("/registrationOk");
+            this.errors.push(
+              "Please check your email (also your spam) and confirm the creation of your account by clicking the confirmation link"
+            );
           })
           .catch(err =>
             this.errors.push(`registration failed: ${err.message}`)

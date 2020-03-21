@@ -1,6 +1,6 @@
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
-const publicKey = fs.readFileSync("./src/key/public.key", "utf8");
+const publicKey = fs.readFileSync("./src/services/key/public.key", "utf8");
 const issuer = process.env.ISSUER;
 
 const verifyOptions = {
@@ -10,7 +10,6 @@ const verifyOptions = {
 };
 
 module.exports = (req, res, next) => {
-  console.log("here in is-auth middleware !!");
   if (req.query && req.query.token) {
     try {
       let token = req.query.token;
