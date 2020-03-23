@@ -53,6 +53,7 @@ export default {
   font-size: 1rem;
   font-weight: bold;
   color: green;
+  pointer-events: none;
 }
 .b-input input:focus + label,
 .b-input input:not(:placeholder-shown) + label {

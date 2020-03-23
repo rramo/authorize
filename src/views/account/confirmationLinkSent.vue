@@ -2,7 +2,7 @@
   <div class="container">
     <div>
       A confirmation has been sent to your email account.<br />
-      Please check your email and confirm it by clicking on the link inside.
+      Please check and confirm your registration by clicking on the link inside.
       <br />
       <br />
       <br />

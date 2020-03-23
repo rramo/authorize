@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <div>
-      Confirmation failed, please sign up
-      <router-link to="/signup">here</router-link>
+      Confirmation failed, please register
+      <router-link to="/register">here</router-link>
     </div>
   </div>
 </template>

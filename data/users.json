@@ -1,0 +1,17 @@
+[
+  {
+    "id": "Sk9_JcrU8",
+    "lastname": "djelassi",
+    "firstname": "omar",
+    "email": "omar.djelassi@gmail.com",
+    "password": "$argon2i$v=19$m=4096,t=3,p=1$jY6GZvFMdwmjiR6huenL5w$BE0HQ0rMdia5mYjX+cnY/LJEXquQdrXGHonbS5mNPf8",
+    "confirmed": true
+  },
+  {
+    "id": "BJZxL9HLU",
+    "lastname": "djelassi",
+    "firstname": "omar",
+    "email": "omar.djelassi@gmail.com",
+    "password": "$argon2i$v=19$m=4096,t=3,p=1$T2s6YtPPXSqnIhLmrlkrDw$iGrZlLrohNvP/NZYdCGyRP7LWB+Xyh95gEEbC5oQBqk"
+  }
+]

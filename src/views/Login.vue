@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div>
-      <form @submit.prevent="signIn">
+      <form class="form" @submit.prevent="login">
         <div>
           <div v-if="errors.length" :class="{ error: errors.length }">
             <div v-for="error in errors" :key="error">
@@ -12,22 +12,22 @@
 
         <BaseInput
           v-model="email"
-          v-bibi
+          type="email"
+          v-autofocus
+          v-autocomplete-disabled
           label="E-mail"
-          type="text"
-          autocomplete="current-email"
         />
 
         <BaseInput
           v-model="password"
+          v-autocomplete-disabled
           label="Password"
           type="password"
-          autocomplete="current-password"
         />
         <div class="info">
-          No account? <router-link to="/signup">Sign up</router-link>!
+          No account? <router-link to="/register">Register</router-link>!
         </div>
-        <div class="actions"><button type="submit">Sign in</button></div>
+        <div class="actions"><button type="submit">Login</button></div>
       </form>
     </div>
   </div>
@@ -43,6 +43,7 @@ export default {
   },
   data() {
     return {
+      username: "",
       email: "",
       password: "",
       redirect_uri: "",
@@ -56,14 +57,14 @@ export default {
     }
   },
   methods: {
-    signIn() {
+    login() {
       let headers = new Headers();
       headers.append("Content-Type", "application/x-www-form-urlencoded");
       this.errors = [];
       let { email, password } = this;
       axios({
         method: "POST",
-        url: "/authorize:9001",
+        url: `http://localhost:${process.env.VUE_APP_AUTH_PORT}/authorize`,
         headers,
         data: {
           email,
@@ -87,6 +88,11 @@ export default {
 </script>
 
 <style>
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .error {
   color: red;
 }

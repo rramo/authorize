@@ -8,10 +8,13 @@
     "test:unit": "vue-cli-service test:unit",
     "test:e2e": "vue-cli-service test:e2e",
     "lint": "vue-cli-service lint",
-    "start": "PORT=8080 npm run serve; PORT=9001 nodemon ./src/app"
+    "all:debug": "concurrently \"npm run proxy:debug\" \"npm run serve\"",
+    "proxy:debug": "node -r dotenv/config --inspect=0.0.0.0:9229 ./src/app"
   },
   "dependencies": {
+    "argon2": "^0.26.1",
     "axios": "^0.19.2",
+    "base64url": "^3.0.1",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.4",
     "cors": "^2.8.5",

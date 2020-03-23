@@ -3,7 +3,7 @@
     <div>
       Confirmation link no more valid, please click <a href="">here</a> to get
       another email confirmation link.
-      <router-link to="/signin">here</router-link>
+      <router-link to="/login">here</router-link>
     </div>
   </div>
 </template>
